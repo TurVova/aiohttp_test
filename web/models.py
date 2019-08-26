@@ -1,5 +1,7 @@
 import sqlalchemy as sa
 
+from utils.config import load_config
+
 metadata = sa.MetaData()
 
 addresses = sa.Table(
@@ -21,8 +23,10 @@ users = sa.Table(
 
 
 def create_db():
+    config = load_config()
     engine = sa.create_engine(
-        'postgresql://dev:developer@localhost:5432/aiohttp_test'
+        f'postgresql://{config["db"]["user"]}:{config["db"]["password"]}'
+        f'@{config["db"]["host"]}:{config["db"]["port"]}/{config["db"]["database"]}'
     )
     metadata.create_all(engine)
 
